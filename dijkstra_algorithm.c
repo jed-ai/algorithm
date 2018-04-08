@@ -12,15 +12,7 @@ Author: Phan Nguyen Vu
 #define N 6 // The number of nodes
 char node[6] = {'u','v','w','x','y','z'};
 
-int min(a, b){
-	if (a>b) {
-		return b;
-	}
-	else{
-		return a;
-	} 
-}
-
+// Return the index of the minimum element in the array dist[]
 int minDistance(int arr[N], int explored[N]){
 	int min_d = 999;
 	int idx = 0;
@@ -38,22 +30,22 @@ int minDistance(int arr[N], int explored[N]){
 	return idx;
 }
 
-void printPath(int parent[], int j)
+// Recursive function to print out the shortest tree from node u to ith node
+void printPath(int predecessor[], int j)
 {
     // Base Case : If j is source
-    if (parent[j]==-1){
+    if (predecessor[j]==-1){
     	printf("--> %c ", node[j]);
     	return;
     }
          
-    printPath(parent, parent[j]);
+    printPath(predecessor, predecessor[j]);
  
     printf("--> %c", node[j]);
 }
  
-// A utility function to print the constructed distance
-// array
-int printResults(int dist[], int n, int parent[])
+// Print the path and the distance from node u to ith node
+int printResults(int dist[], int n, int predecessor[])
 {
     int src = 0;
     int i = 0;
@@ -62,14 +54,14 @@ int printResults(int dist[], int n, int parent[])
     for (i = 1; i < N; i++)
     {
         printf("\n%c -> %c \t\t %d\t%c ", node[src], node[i], dist[i], node[src]);
-        printPath(parent, i);
+        printPath(predecessor, i);
     }
 }
 
 void dijkstra(int c[N][N], int startNode){
 	int d[N];	// Create an array to save all shortest paths from the the start node (node 0) --> node i
 	int S[N]; 	// Create an array that stores bool value (true or false) to know whether the node have already been explored
-	int shortest_path[N];	// Create an array to save shortest path from source
+	int pre[N];	// Create an array to save predecessors
 	
 	// Initialize loop varibale
 	int i = 0;
@@ -79,8 +71,8 @@ void dijkstra(int c[N][N], int startNode){
 	
 	// Initialize value of dist and S
 	for(i = 0; i<N; i++){
-		shortest_path[i] = -1;
-		d[i] = inf;
+		pre[i] = -1; 	// means null predecessor
+		d[i] = inf; 	// All vertices are initialized with a weight of infinity at the begining.
 		S[i] = 1;
 	}
 	
@@ -96,10 +88,11 @@ void dijkstra(int c[N][N], int startNode){
 			// If the node is not in S (or has not been explored yet) --> update the cost
 			if(S[v] == 1){
 				dw = d[w];
-				d[v] = min(d[v], dw + c[w][v]);
-				if (((dw + c[w][v]) == d[v]) && (v != w)) {
-					shortest_path[v] = w;
+				if ((dw + c[w][v]) < d[v]) {
+					pre[v] = w;
+					d[v] = dw + c[w][v];
 				}
+				
 			}					
 		}
 		// Find the index of the min distance
@@ -107,7 +100,7 @@ void dijkstra(int c[N][N], int startNode){
 		w = minDistance(d, S);
 	}
 	
-	printResults(d, N, shortest_path);
+	printResults(d, N, pre);
 }
 
 int main(){
@@ -123,5 +116,4 @@ int main(){
 	
 	return 0;
 }
-
 
