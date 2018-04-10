@@ -10,6 +10,7 @@ Date: 9th April, 2018
 
 #define inf 999 // Assign a large value that describe infinity
 #define N 7 // The number of nodes
+const int node[7] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
 
 void printPath(int predecessor[], int j)
 {
@@ -20,7 +21,7 @@ void printPath(int predecessor[], int j)
          
     printPath(predecessor, predecessor[j]);
  
-    printf("--> %d", j);
+    printf("--> %c", node[j]);
 }
  
 // Print the path and the distance from node u to ith node
@@ -32,7 +33,7 @@ int printResults(int n, int predecessor[])
     printf("Vertex\t  Distance\tPath");
     for (i = 1; i < N; i++)
     {
-        printf("\n%d -> %d \t\t %d ", src, i, src);
+        printf("\n%c -> %c \t\t %c ", node[src], node[i], node[src]);
         printPath(predecessor, i);
     }
 }
@@ -145,7 +146,6 @@ int main(){
 	
 	return 0;
 }
-
 
 
 
